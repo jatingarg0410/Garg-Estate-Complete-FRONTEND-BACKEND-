@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken'
 import prisma from '../lib/prisma.js'
 export const register = async (req, res) => {
   const { username, email, password } = req.body
-  //HASH THE PASSWORD\
+  //HASH THE PASSWORD
   try {
     const hashedPassword = await bcrypt.hash(password, 10)
     console.log(hashedPassword)
@@ -56,25 +56,26 @@ export const login = async (req, res) => {
     const token = jwt.sign(
       {
         id: user.id,
+        isAdmin: false,
       },
       process.env.JWT_SECRET_KEY,
       {
         expiresIn: age,
       }
     )
-    res.cookie('token', token, {
-      httpOnly: true,
-      maxAge: age,
-    })
-    res.status(200).json({
-      message: 'Logged in successfully',
-      user: user,
-    })
+    const { password: userPassword, ...userInfo } = user
+
+    res
+      .cookie('token', token, {
+        httpOnly: true,
+        // secure:true,
+        maxAge: age,
+      })
+      .status(200)
+      .json(userInfo)
   } catch (err) {
     console.log(err)
-    res.status(500).json({
-      message: 'Failed to login',
-    })
+    res.status(500).json({ message: 'Failed to login!' })
   }
 }
 export const logout = (req, res) => {
