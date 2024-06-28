@@ -6,7 +6,7 @@ import {
   Link,
 } from 'react-router-dom'
 import ListPage from './pages/listPage/listPage'
-import Layout from './pages/layout/layout'
+import { Layout, RequireAuth } from './pages/layout/layout'
 import SinglePage from './pages/singlePage/singlePage'
 import ProfilePage from './pages/profilePage/profilePage'
 import Register from './pages/register/register'
@@ -29,10 +29,7 @@ function App() {
           path: '/:id',
           element: <SinglePage />,
         },
-        {
-          path: '/profile',
-          element: <ProfilePage />,
-        },
+
         {
           path: '/register',
           element: <Register />,
@@ -42,6 +39,12 @@ function App() {
           path: '/login',
           element: <Login />,
         },
+      ],
+    },
+    {
+      path: '/',
+      element: <RequireAuth />,
+      children: [
         {
           path: '/profile',
           element: <ProfilePage />,

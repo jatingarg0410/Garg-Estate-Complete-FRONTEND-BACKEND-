@@ -33,4 +33,4 @@ function RequireAuth() {
   }
 }
 
-export default Layout
+export { Layout, RequireAuth }
